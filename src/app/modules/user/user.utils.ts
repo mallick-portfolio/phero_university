@@ -1,5 +1,5 @@
-import { TAcademicSemester } from "../academicSemester/academicSemester.interface";
-import { User } from "./user.model";
+import { TAcademicSemester } from '../academicSemester/academicSemester.interface';
+import { User } from './user.model';
 
 const findLastStudentId = async () => {
   const lastStudent = await User.findOne(
@@ -45,4 +45,31 @@ export const generateStudentId = async (payload: TAcademicSemester) => {
   incrementId = `${payload.year}${payload.code}${incrementId}`;
 
   return incrementId;
+};
+
+const findLastAdmintId = async () => {
+  const lastAdmin = await User.findOne(
+    {
+      role: 'admin',
+    },
+    {
+      id: 1,
+      _id: 0,
+    },
+  )
+    .sort({
+      createdAt: -1,
+    })
+    .lean();
+
+  //2030 01 0001
+  return lastAdmin?.id ? lastAdmin.id : undefined;
+};
+export const generateAdminId = async () => {
+  const initialId = 1;
+  const lastAdminId = await findLastAdmintId();
+  const lastAdminIdId = Number(lastAdminId?.split('-')[1]) + 1 || initialId;
+  const currentAccademicFacultyId = lastAdminIdId.toString().padStart(4, '0');
+
+  return `A-${currentAccademicFacultyId}`;
 };

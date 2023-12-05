@@ -9,13 +9,26 @@ const getAcademicFacultyFromDB = async () => {
 // get single
 const getAcademicFacultyByIdFromDB = async (id: string) => {
   if (await AcademicFaculty.isFacultyExistWithTheId(id)) {
-    const result = await AcademicFaculty.findById(id);
+    const result = await AcademicFaculty.findOne({ facultyId: id });
     return result;
   }
 };
 
 // create
 const createAcademicFacultyIntoDB = async (payload: TAcademicFaculty) => {
+  const initialId = '0001';
+  const lastAcademicFacult = await AcademicFaculty.find()
+    .sort({
+      createdAt: -1,
+    })
+    .limit(1);
+  const lastAcademicFacultId =
+    Number(lastAcademicFacult[0]?.facultyId?.split('-')[1]) + 1 || initialId;
+  const currentAccademicFacultyId = lastAcademicFacultId
+    .toString()
+    .padStart(4, '0');
+
+  payload.facultyId = `F-${currentAccademicFacultyId}`;
   const result = await AcademicFaculty.create(payload);
   return result;
 };
@@ -27,8 +40,21 @@ const updateAcademicFacultyByIdIntoDB = async (
 ) => {
   if (await AcademicFaculty.isFacultyExistWithTheId(id)) {
     const result = await AcademicFaculty.findOneAndUpdate(
-      { _id: id },
+      { facultyId: id },
       payload,
+      {
+        new: true,
+      },
+    );
+    return result;
+  }
+};
+// update
+const deleteAcademicFacultyByIdIntoDB = async (id: string) => {
+  if (await AcademicFaculty.isFacultyExistWithTheId(id)) {
+    const result = await AcademicFaculty.findOneAndUpdate(
+      { facultyId: id },
+      { isDeleted: true },
       {
         new: true,
       },
@@ -42,4 +68,5 @@ export const AcademicFacultyServices = {
   getAcademicFacultyFromDB,
   updateAcademicFacultyByIdIntoDB,
   getAcademicFacultyByIdFromDB,
+  deleteAcademicFacultyByIdIntoDB,
 };

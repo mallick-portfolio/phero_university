@@ -16,6 +16,15 @@ const academicFacultySchema = new Schema<
       required: true,
       unique: true,
     },
+    facultyId: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
@@ -37,7 +46,7 @@ academicFacultySchema.pre('save', async function (next) {
 academicFacultySchema.statics.isFacultyExistWithTheId = async function (
   id: ObjectId,
 ) {
-  const isExist = await AcademicFaculty.findById(id);
+  const isExist = await AcademicFaculty.findOne({ facultyId: id });
   if (!isExist) {
     throw new AppError(httpStatus.NOT_FOUND, 'Faculty not found with this id');
   }
