@@ -11,4 +11,5 @@ export default {
   database_url: process.env.DATABASE_URL,
   default_password: process.env.DEFAULT_PASSWORD,
   salt_password: process.env.SALT_PASSWORD,
+  NODE_ENVIRONMENT: process.env.NODE_ENVIRONMENT,
 };
