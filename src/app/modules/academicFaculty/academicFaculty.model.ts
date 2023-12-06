@@ -16,15 +16,6 @@ const academicFacultySchema = new Schema<
       required: true,
       unique: true,
     },
-    facultyId: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    isDeleted: {
-      type: Boolean,
-      default: false,
-    },
   },
   {
     timestamps: true,

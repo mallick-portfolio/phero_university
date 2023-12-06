@@ -73,3 +73,29 @@ export const generateAdminId = async () => {
 
   return `A-${currentAccademicFacultyId}`;
 };
+const findLastFacultyId = async () => {
+  const lastAdmin = await User.findOne(
+    {
+      role: 'faculty',
+    },
+    {
+      id: 1,
+      _id: 0,
+    },
+  )
+    .sort({
+      createdAt: -1,
+    })
+    .lean();
+
+  //2030 01 0001
+  return lastAdmin?.id ? lastAdmin.id : undefined;
+};
+export const generateFacultyId = async () => {
+  const initialId = 1;
+  const lastFacultyId = await findLastFacultyId();
+  const lastFacultyIdId = Number(lastFacultyId?.split('-')[1]) + 1 || initialId;
+  const currentAccademicFacultyId = lastFacultyIdId.toString().padStart(4, '0');
+
+  return `F-${currentAccademicFacultyId}`;
+};

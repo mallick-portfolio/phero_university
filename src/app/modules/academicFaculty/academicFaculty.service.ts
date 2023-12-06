@@ -16,19 +16,6 @@ const getAcademicFacultyByIdFromDB = async (id: string) => {
 
 // create
 const createAcademicFacultyIntoDB = async (payload: TAcademicFaculty) => {
-  const initialId = '0001';
-  const lastAcademicFacult = await AcademicFaculty.find()
-    .sort({
-      createdAt: -1,
-    })
-    .limit(1);
-  const lastAcademicFacultId =
-    Number(lastAcademicFacult[0]?.facultyId?.split('-')[1]) + 1 || initialId;
-  const currentAccademicFacultyId = lastAcademicFacultId
-    .toString()
-    .padStart(4, '0');
-
-  payload.facultyId = `F-${currentAccademicFacultyId}`;
   const result = await AcademicFaculty.create(payload);
   return result;
 };

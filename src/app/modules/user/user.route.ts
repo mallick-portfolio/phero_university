@@ -2,9 +2,8 @@ import { Router } from 'express';
 import { UserControllers } from './user.controller';
 import { studentValidations } from '../student/student.validator';
 import validateSchema from '../../middlewares/validateSchema';
-import { AcademicFacultyValidations } from '../academicFaculty/academicFaculty.validation';
-import { AcademicFacultyControllers } from '../academicFaculty/academicFaculty.controller';
 import { AdminValidationSchema } from '../admin/admin.validation';
+import { FacultyValidationSchema } from '../faculty/faculty.validation';
 
 const router = Router();
 
@@ -18,13 +17,10 @@ router.post(
   validateSchema(AdminValidationSchema.createAdminValidationSchema),
   UserControllers.createAdmin,
 );
-
 router.post(
-  '/create-academic-faculty',
-  validateSchema(
-    AcademicFacultyValidations.createAcademicFacultySchemaValidation,
-  ),
-  AcademicFacultyControllers.createAcademicFaculty,
+  '/create-faculty',
+  validateSchema(FacultyValidationSchema.createFacultyValidationSchema),
+  UserControllers.createFaculty,
 );
 
 export const UserRoute = router;
